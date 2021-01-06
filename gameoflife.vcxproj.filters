@@ -16,6 +16,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENCE.md" />
+    <None Include="README.md" />
+    <None Include=".gitignore" />
+    <None Include=".gitattributes" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="olcPixelGameEngine.h">

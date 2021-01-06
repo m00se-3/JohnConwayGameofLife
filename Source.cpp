@@ -168,15 +168,15 @@ int main(int argc, char** argv)
 		{
 			try
 			{
-				if (argv[c] == "--worldWidth" && argc > c + 1)
+				if (strcmp(argv[c], "--worldWidth") == 0 && argc > c)
 				{
 					wWidth = static_cast<unsigned int>(std::stoi(argv[c + 1]));
 				}
-				else if (argv[c] == "--worldHeight" && argc > c + 1)
+				else if (strcmp(argv[c], "--worldHeight") == 0 && argc >c)
 				{
 					wHeight = static_cast<unsigned int>(std::stoi(argv[c + 1]));
 				}
-				else if (argv[c] == "--updatesPerSecond" && argc > c + 1)
+				else if (strcmp(argv[c], "--updatesPerSecond") == 0 && argc > c)
 				{
 					float ups = static_cast<float>(std::stof(argv[c + 1]));
 					if (ups == 0.f) throw std::invalid_argument("The value of --updatesPerSecond cannot be zero...");
@@ -197,8 +197,13 @@ int main(int argc, char** argv)
 		}
 	}
 
+	// Match the window size to the world size up to a threshold of
+	// 1024 wide and 768 high.
+	int ww = (wWidth >= 1024) ? 1024 : wWidth;
+	int wh = (wHeight >= 768) ? 768 : wHeight;
+
 	GameOfLife g(wWidth, wHeight, updatesPerSecond);
 
-	if (g.Construct(256, 192, 4, 4))
+	if (g.Construct(ww, wh, 1, 1))
 		g.Start();
 }
