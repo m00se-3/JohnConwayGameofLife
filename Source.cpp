@@ -1,10 +1,8 @@
 #define OLC_PGE_APPLICATION
 #include "olcPixelGameEngine.h"
 
-#include <iostream>
-#include <vector>
 #include <random>
-//#include <chrono>
+// olcPixelGameEngine already includes <vector> <chrono> and <iostream>.
 
 constexpr uint8_t cellAlive = 1;
 constexpr uint8_t cellDead = 0;
@@ -30,9 +28,15 @@ public:
 	size_t worldWidth;
 	size_t worldHeight;
 
-	GameOfLife()
+	// To use a parameterized constructor, you must explicitly call the
+	// olcPixelGameEngine constructor.
+	GameOfLife(size_t w, size_t h, float u) : olc::PixelGameEngine()
 	{
 		sAppName = "Game of Life Demo";
+
+		worldWidth = w;
+		worldHeight = h;
+		simEpoch = 1000.f / u;
 	}
 
 	bool OnUserCreate() override
@@ -134,8 +138,6 @@ public:
 			+ previousState[y * worldWidth + lx] + previousState[y * worldWidth + rx] + previousState[by * worldWidth + lx]
 			+ previousState[by * worldWidth + x] + previousState[by * worldWidth + rx];
 	}
-
-	void setUPS(float u) { simEpoch = 1000.f / u; }
 };
 
 
@@ -195,14 +197,7 @@ int main(int argc, char** argv)
 		}
 	}
 
-	// The olcPixelGameEngine requires that you use a default constructor for your
-	// base class. So this is a work around that allows us to customize our world.
-
-	GameOfLife g;
-
-	g.setUPS(updatesPerSecond);
-	g.worldWidth = wWidth;
-	g.worldHeight = wHeight;
+	GameOfLife g(wWidth, wHeight, updatesPerSecond);
 
 	if (g.Construct(256, 192, 4, 4))
 		g.Start();
