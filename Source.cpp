@@ -55,7 +55,7 @@ public:
 
 		for (unsigned int s = 0; s < numCells; s++)
 		{
-			currentState.push_back((rand() % 256 < 150) ? cellAlive : cellDead);
+			currentState.push_back(rand() % 2);
 		}
 
 
@@ -124,7 +124,7 @@ public:
 		auto wrap = [](int v, size_t size)
 		{
 			if (v == -1) return size - 1;
-			if (v == size) return 0u;
+			if (v == size) return (size_t)0;
 
 			return (size_t)v;
 		};
@@ -197,13 +197,21 @@ int main(int argc, char** argv)
 		}
 	}
 
-	// Match the window size to the world size up to a threshold of
-	// 1024 wide and 768 high.
-	int ww = (wWidth >= 1024) ? 1024 : wWidth;
-	int wh = (wHeight >= 768) ? 768 : wHeight;
+	int cw, ch;
+
+	// Calculate if cell sizes larger than 1x1 pixels are needed.
+	if (wWidth < 1024)
+		cw = 1024 / wWidth;
+	else
+		cw = 1;
+
+	if (wHeight < 768)
+		ch = 768 / wHeight;
+	else
+		ch = 1;
 
 	GameOfLife g(wWidth, wHeight, updatesPerSecond);
 
-	if (g.Construct(ww, wh, 1, 1))
+	if (g.Construct(1024 / cw, 768 / ch, cw, ch))
 		g.Start();
 }
