@@ -145,6 +145,8 @@
   <ItemGroup>
     <None Include=".gitattributes" />
     <None Include=".gitignore" />
+    <None Include="LargeWorldx64.bat" />
+    <None Include="LargeWorldx86.bat" />
     <None Include="LICENCE.md" />
     <None Include="README.md" />
   </ItemGroup>
