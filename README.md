@@ -11,15 +11,9 @@ The game can be built for any platform that the olcPixelGameEngine supports.
 
 In order to customize the world, the following arguments are supported:
 
-- "--worldWidth" controls the number of cells in the x-axis.
- - Default: 256
- 
-- "--worldHeight" controls the number of cells in the y-axis.
- - Default: 192
- 
-- "--updatesPerSecond" controls the number of times the simulation will try to update every second.
- - Default: 60
- 
+- "--worldWidth" controls the number of cells in the x-axis. Default: 256 
+- "--worldHeight" controls the number of cells in the y-axis. Default: 192
+- "--updatesPerSecond" controls the number of times the simulation will try to update every second. Default: 60
 
 To keep the size of the window consistent, the pixel size of each cell will be adjusted if the world size is less than 1024 x 768.
 
