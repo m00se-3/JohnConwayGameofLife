@@ -19,5 +19,5 @@ To keep the size of the window consistent, the pixel size of each cell will be a
 
 ## Batch Files
 
-This repository includes .bat files to quickly showcase larger life worlds with. In order to use these files, please ensure that the
+This repository includes LargeWorld***.bat files to quickly showcase larger life worlds with. In order to use these files, please ensure that the
 game has been built in **Release** mode using the CPU type indicated in the name.
