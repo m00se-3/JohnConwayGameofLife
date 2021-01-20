@@ -7,6 +7,7 @@
 constexpr uint8_t cellAlive = 1;
 constexpr uint8_t cellDead = 0;
 
+// Used in the drawQueue to determine which cells to draw at the end of an epoch.
 struct CellPosition
 {
 	int x, y;
@@ -19,7 +20,9 @@ struct Camera
 
 class GameOfLife : public olc::PixelGameEngine
 {
+	// Two copies of the map are needed to avoid contaminating the simulation.
 	std::vector<uint8_t> currentState, previousState;
+
 	std::vector<CellPosition> drawQueue;
 	bool simRunning = true;
 
@@ -74,7 +77,7 @@ public:
 	{
 		auto beginTime = std::chrono::high_resolution_clock::now();
 
-		if (GetKey(olc::Key::SPACE).bReleased) simRunning = !simRunning;
+		if (GetKey(olc::Key::SPACE).bPressed) simRunning = !simRunning;
 		if (GetKey(olc::Key::W).bHeld) cam.y -= 100.f * fElapsedTime;
 		if (GetKey(olc::Key::S).bHeld) cam.y += 100.f * fElapsedTime;
 		if (GetKey(olc::Key::A).bHeld) cam.x -= 100.f * fElapsedTime;
@@ -166,14 +169,14 @@ public:
 /*
 	The user can specify a custom world size using:
 
-	--worldWidth
-	--worldHeight
+	--width
+	--height
 
 	Default: 256 x 192 
 
 	The user can specify a number of world updates per second using:
 
-	--updatesPerSecond
+	--ups
 
 	Default: 60
 */
@@ -190,18 +193,18 @@ int main(int argc, char** argv)
 		{
 			try
 			{
-				if (strcmp(argv[c], "--worldWidth") == 0 && argc > c)
+				if (strcmp(argv[c], "--width") == 0 && argc > c)
 				{
 					wWidth = static_cast<unsigned int>(std::stoi(argv[c + 1]));
 				}
-				else if (strcmp(argv[c], "--worldHeight") == 0 && argc >c)
+				else if (strcmp(argv[c], "--height") == 0 && argc >c)
 				{
 					wHeight = static_cast<unsigned int>(std::stoi(argv[c + 1]));
 				}
-				else if (strcmp(argv[c], "--updatesPerSecond") == 0 && argc > c)
+				else if (strcmp(argv[c], "--ups") == 0 && argc > c)
 				{
 					float ups = static_cast<float>(std::stof(argv[c + 1]));
-					if (ups == 0.f) throw std::invalid_argument("The value of --updatesPerSecond cannot be zero...");
+					if (ups == 0.f) throw std::invalid_argument("The value of --ups cannot be zero...");
 					updatesPerSecond = ups;
 				}
 				else

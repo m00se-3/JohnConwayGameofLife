@@ -1,23 +1,28 @@
 # JohnConwayGameofLife
 A demonstration of the classic Game of Life. This game was originally invented by the British Mathmetician, John Conway.
-This version, besides the game's basic algorithm, includes the following features:
+This version was created using the olcPixelGameEngine by OneLoneCoder.com. An executable file can be downloaded from the release section.
 
-- Renders the world using the olcPixelGameEngine by OneLoneCoder.com
-- Allows the user to customize the size of the world and the update rate via command-line arguments.
-- Allows for camera panning when the world exceeds 1024 X 768. (via WASD keys)
+The Game of Life is a 2 dimensional grid of cells that perform a simple simulation. A cell in the game can either be alive(white) or dead(black). The game follows the following rules:
 
-## Usage
-The game can be built for any platform that the olcPixelGameEngine supports.
+- A cell that is **alive** keeps living if it has 2 or 3 live neighbors, otherwise it dies.
+- A cell that is **dead** comes to life if it has exactly 3 live neighbors.
 
-In order to customize the world, the following arguments are supported:
+## Controls
 
-- "--worldWidth" controls the number of cells in the x-axis. Default: 256 
-- "--worldHeight" controls the number of cells in the y-axis. Default: 192
-- "--updatesPerSecond" controls the number of times the simulation will try to update every second. Default: 60
+The Game of Life is just a simulation, and on it's own it has no user input. This version, however, includes some user controls that add a little bit to the experience:
 
-To keep the size of the window consistent, the pixel size of each cell will be adjusted if the world size is less than 1024 x 768.
+- Pause and resume the simulation using the **spacebar**.
+- Specify custom dimensions for the world using command-line arguments(see below).
+- Pan around the world using the WASD keys(only usable if the world size exceeds 1024x768).
 
-## Batch Files
+Note: The size of each cell(in pixels) will adjust to the different grid sizes you give it.
 
-This repository includes LargeWorld***.bat files to quickly showcase larger life worlds with. In order to use these files, please ensure that the
-game has been built in **Release** mode using the CPU type indicated in the name.
+## Command-line arguments
+
+This game achieves custom world sizes and update frequency through 3 command-line arguments. They are:
+
+- **--width** The width of the grid. Default: 256
+- **--height** The height of the grid. Default: 192
+- **--ups** The number of times per second that the grid will update. Default: 60
+
+Note: The release zip flder contains some .bat files that include some sample custom sizes.

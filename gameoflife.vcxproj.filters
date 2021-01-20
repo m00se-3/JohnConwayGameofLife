@@ -19,12 +19,6 @@
     <None Include="README.md" />
     <None Include=".gitignore" />
     <None Include=".gitattributes" />
-    <None Include="LargeWorldx64.bat">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="LargeWorldx86.bat">
-      <Filter>Source Files</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="olcPixelGameEngine.h">

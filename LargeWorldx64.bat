@@ -1,1 +1,0 @@
-x64\Release\gameoflife.exe --worldWidth 2048 --worldHeight 1536
