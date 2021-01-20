@@ -203,7 +203,7 @@ int main(int argc, char** argv)
 				}
 				else if (strcmp(argv[c], "--ups") == 0 && argc > c)
 				{
-					int ups = static_cast<float>(std::stoi(argv[c + 1]));
+					int ups = std::stoi(argv[c + 1]);
 					if (ups == 0) throw std::invalid_argument("The value of --ups cannot be zero...");
 					updatesPerSecond = ups;
 				}
