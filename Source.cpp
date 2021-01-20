@@ -30,7 +30,7 @@ class GameOfLife : public olc::PixelGameEngine
 	// The time it took to complete a world update is subtracted from
 	// this value to determine the amount of time the thread needs to 
 	// sleep before the next update can begin.
-	float simEpoch;
+	unsigned int simEpoch;
 
 	size_t worldWidth;
 	size_t worldHeight;
@@ -41,10 +41,10 @@ public:
 	
 	// To use a parameterized constructor, you must explicitly call the
 	// olcPixelGameEngine constructor.
-	GameOfLife(size_t w, size_t h, float u)
+	GameOfLife(size_t w, size_t h, unsigned int u)
 		: olc::PixelGameEngine(),
 		worldWidth(w), worldHeight(h),
-		simEpoch(1000.f / u)
+		simEpoch(1000000 / u)
 	{
 		sAppName = "Game of Life Demo";
 	}
@@ -75,7 +75,7 @@ public:
 
 	bool OnUserUpdate(float fElapsedTime) override
 	{
-		auto beginTime = std::chrono::high_resolution_clock::now();
+		auto beginTime = std::chrono::steady_clock::now();
 
 		if (GetKey(olc::Key::SPACE).bPressed) simRunning = !simRunning;
 		if (GetKey(olc::Key::W).bHeld) cam.y -= 100.f * fElapsedTime;
@@ -131,10 +131,10 @@ public:
 
 		}
 
-		auto endTime = std::chrono::high_resolution_clock::now();
-		auto simTime = std::chrono::duration_cast<std::chrono::milliseconds>(endTime.time_since_epoch() - beginTime.time_since_epoch());
+		auto endTime = std::chrono::steady_clock::now();
+		auto simTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime.time_since_epoch() - beginTime.time_since_epoch());
 
-		std::this_thread::sleep_for(std::chrono::duration<float, std::milli>(simEpoch - simTime.count()));
+		std::this_thread::sleep_for(std::chrono::microseconds(simEpoch - simTime.count()));
 
 		return true;
 	}
@@ -184,7 +184,7 @@ int main(int argc, char** argv)
 {
 	size_t wWidth = 256;
 	size_t wHeight = 192;
-	float updatesPerSecond = 60.f;
+	int updatesPerSecond = 60;
 
 	// Validate arguments and catch any user errors.
 	if (argc > 1)
@@ -203,8 +203,8 @@ int main(int argc, char** argv)
 				}
 				else if (strcmp(argv[c], "--ups") == 0 && argc > c)
 				{
-					float ups = static_cast<float>(std::stof(argv[c + 1]));
-					if (ups == 0.f) throw std::invalid_argument("The value of --ups cannot be zero...");
+					int ups = static_cast<float>(std::stoi(argv[c + 1]));
+					if (ups == 0) throw std::invalid_argument("The value of --ups cannot be zero...");
 					updatesPerSecond = ups;
 				}
 				else

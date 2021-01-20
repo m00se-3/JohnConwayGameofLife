@@ -26,3 +26,8 @@ This game achieves custom world sizes and update frequency through 3 command-lin
 - **--ups** The number of times per second that the grid will update. Default: 60
 
 Note: The release zip flder contains some .bat files that include some sample custom sizes.
+
+## Known Issue
+
+The game's actual FPS is going to run about half what the target FPS is. This is not a performance problem. It is either CPU scheduling
+or a bug within the code that I have not been able to identify yet.
