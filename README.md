@@ -19,14 +19,10 @@ Note: The size of each cell(in pixels) will adjust to the different grid sizes y
 
 ## Command-line arguments
 
-This game achieves custom world sizes and update frequency through 3 command-line arguments. They are:
+This game achieves custom world size and look through 3 command-line arguments. They are:
 
 - **--width** The width of the grid. Default: 256
 - **--height** The height of the grid. Default: 192
-- **--ups** The number of times per second that the grid will update. Default: 60
-
-Note: The release zip flder contains some .bat files that include some sample custom sizes.
-
-## Known Issue
-
-The game's actual FPS is going to run about half what the target FPS is. This is not a performance problem. It seems to be CPU scheduling and other factors beyond my control.
+- **--seed** Used to generate different worlds based on the value. Default: 0
+The release zip flder contains some .bat files that include some sample custom sizes. The **--seed** argument is a bit limited in how varied it can make the world. 
+It is just a random number between 0 and 1 after all.
