@@ -29,5 +29,4 @@ Note: The release zip flder contains some .bat files that include some sample cu
 
 ## Known Issue
 
-The game's actual FPS is going to run about half what the target FPS is. This is not a performance problem. It is either CPU scheduling
-or a bug within the code that I have not been able to identify yet.
+The game's actual FPS is going to run about half what the target FPS is. This is not a performance problem. It seems to be CPU scheduling and other factors beyond my control.
