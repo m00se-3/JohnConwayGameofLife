@@ -2,6 +2,8 @@
 #include "olcPixelGameEngine.h"
 
 #include <random>
+#include "fmt/format.h"
+#include "fmt/ostream.h"	
 // olcPixelGameEngine already includes <vector> <chrono> and <iostream>.
 
 constexpr uint8_t cellAlive = 1;
@@ -26,14 +28,10 @@ class GameOfLife : public olc::PixelGameEngine
 	std::vector<CellPosition> drawQueue;
 	bool simRunning = true;
 
-	// This number represents an epoch of time in the simulation.
-	// The time it took to complete a world update is subtracted from
-	// this value to determine the amount of time the thread needs to 
-	// sleep before the next update can begin.
-	unsigned int simEpoch;
+	const long seed = 0;
 
-	size_t worldWidth;
-	size_t worldHeight;
+	const size_t worldWidth;
+	const size_t worldHeight;
 
 	Camera cam;
 
@@ -41,10 +39,12 @@ public:
 	
 	// To use a parameterized constructor, you must explicitly call the
 	// olcPixelGameEngine constructor.
-	GameOfLife(size_t w, size_t h, unsigned int u)
+	GameOfLife(size_t w, size_t h, long s)
 		: olc::PixelGameEngine(),
 		worldWidth(w), worldHeight(h),
-		simEpoch(1000000 / u)
+		currentState(std::vector<uint8_t>(w*h)),
+		previousState(std::vector<uint8_t>(w* h)),
+		seed(s)
 	{
 		sAppName = "Game of Life Demo";
 	}
@@ -53,19 +53,17 @@ public:
 	{
 		// Prime the random generator before building the world.
 		std::minstd_rand rand;
-		rand.seed(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+		rand.seed(seed);
 
 		size_t numCells = worldWidth * worldHeight;
 
 		if(numCells == 0) numCells = ((size_t)ScreenWidth() * (size_t)ScreenHeight()); 
 
-		currentState.reserve(numCells);
-		previousState.reserve(numCells);
 		drawQueue.reserve((size_t)ScreenWidth() * (size_t)ScreenHeight());
 
-		for (unsigned int s = 0; s < numCells; s++)
+		for (unsigned long s = 0; s < numCells; s++)
 		{
-			currentState.push_back(rand() % 2);
+			currentState.at(s) = rand() % 2;
 		}
 		
 		cam = {0.f, 0.f, (float)ScreenWidth(), (float)ScreenHeight()};
@@ -75,7 +73,6 @@ public:
 
 	bool OnUserUpdate(float fElapsedTime) override
 	{
-		auto beginTime = std::chrono::steady_clock::now();
 
 		if (GetKey(olc::Key::SPACE).bPressed) simRunning = !simRunning;
 		if (GetKey(olc::Key::W).bHeld) cam.y -= 100.f * fElapsedTime;
@@ -131,11 +128,6 @@ public:
 
 		}
 
-		auto endTime = std::chrono::steady_clock::now();
-		auto simTime = std::chrono::duration_cast<std::chrono::microseconds>(endTime.time_since_epoch() - beginTime.time_since_epoch());
-
-		std::this_thread::sleep_for(std::chrono::microseconds(simEpoch - simTime.count()));
-
 		return true;
 	}
 
@@ -174,17 +166,17 @@ public:
 
 	Default: 256 x 192 
 
-	The user can specify a number of world updates per second using:
+	The user can specify a seed for the world to generate with:
 
-	--ups
+	--seed
 
-	Default: 60
+	Default: 0
 */
 int main(int argc, char** argv)
 {
 	size_t wWidth = 256;
 	size_t wHeight = 192;
-	int updatesPerSecond = 60;
+	long seed = 0;
 
 	// Validate arguments and catch any user errors.
 	if (argc > 1)
@@ -201,21 +193,18 @@ int main(int argc, char** argv)
 				{
 					wHeight = static_cast<unsigned int>(std::stoi(argv[c + 1]));
 				}
-				else if (strcmp(argv[c], "--ups") == 0 && argc > c)
+				else if (strcmp(argv[c], "--seed") == 0 && argc > c)
 				{
-					int ups = std::stoi(argv[c + 1]);
-					if (ups == 0) throw std::invalid_argument("The value of --ups cannot be zero...");
-					updatesPerSecond = ups;
+					seed = std::stol(argv[c + 1]);
 				}
 				else
 				{
-					std::cout << "Argument: '" << argv[c] << "' is invalid...\n";
-					exit(EXIT_FAILURE);
+					throw std::invalid_argument(fmt::format("Argument: '{}' is invalid...\n", argv[c]));
 				}
 			}
 			catch (const std::invalid_argument& err)
 			{
-				std::cout << err.what();
+				fmt::print(stdout, "{}", err.what());
 				
 				exit(EXIT_FAILURE);
 			}
@@ -235,7 +224,7 @@ int main(int argc, char** argv)
 	else
 		ch = 1;
 
-	GameOfLife g(wWidth, wHeight, updatesPerSecond);
+	GameOfLife g(wWidth, wHeight, seed);
 
 	if (g.Construct(1024 / cw, 768 / ch, cw, ch))
 		g.Start();
