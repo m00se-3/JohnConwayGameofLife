@@ -24,5 +24,6 @@ This game achieves custom world size and look through 3 command-line arguments. 
 - **--width** The width of the grid. Default: 256
 - **--height** The height of the grid. Default: 192
 - **--seed** Used to generate different worlds based on the value. Default: 0
-The release zip flder contains some .bat files that include some sample custom sizes. The **--seed** argument is a bit limited in how varied it can make the world. 
+
+The release zip folder contains some .bat files that include some sample custom sizes. The **--seed** argument is a bit limited in how varied it can make the world. 
 It is just a random number between 0 and 1 after all.
