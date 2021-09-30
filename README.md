@@ -1,6 +1,6 @@
 # JohnConwayGameofLife
 A demonstration of the classic Game of Life. This game was originally invented by the British Mathmetician, John Conway.
-This version was created using the olcPixelGameEngine by OneLoneCoder.com. An executable file can be downloaded from the release section.
+This version was created using the [olcPixelGameEngine](https://github.com/OneLoneCoder/olcPixelGameEngine) by OneLoneCoder.com. An executable file can be downloaded from the release section.
 
 The Game of Life is a 2 dimensional grid of cells that perform a simple simulation. A cell in the game can either be alive(white) or dead(black). The game follows the following rules:
 

@@ -28,8 +28,6 @@ class GameOfLife : public olc::PixelGameEngine
 	std::vector<CellPosition> drawQueue;
 	bool simRunning = true;
 
-	const long seed = 0;
-
 	const size_t worldWidth;
 	const size_t worldHeight;
 
@@ -39,12 +37,11 @@ public:
 	
 	// To use a parameterized constructor, you must explicitly call the
 	// olcPixelGameEngine constructor.
-	GameOfLife(size_t w, size_t h, long s)
+	GameOfLife(size_t w, size_t h)
 		: olc::PixelGameEngine(),
 		worldWidth(w), worldHeight(h),
 		currentState(std::vector<uint8_t>(w*h)),
-		previousState(std::vector<uint8_t>(w* h)),
-		seed(s)
+		previousState(std::vector<uint8_t>(w* h))
 	{
 		sAppName = "Game of Life Demo";
 	}
@@ -53,7 +50,7 @@ public:
 	{
 		// Prime the random generator before building the world.
 		std::minstd_rand rand;
-		rand.seed(seed);
+		rand.seed(std::chrono::high_resolution_clock::now().time_since_epoch().count());
 
 		size_t numCells = worldWidth * worldHeight;
 
@@ -122,7 +119,7 @@ public:
 			Clear(olc::BLACK);
 
 			for (auto& cell : drawQueue)
-				Draw({ cell.x - (int)cam.x, cell.y - (int)cam.y });
+				Draw(olc::vi2d{ cell.x - static_cast<int>(cam.x), cell.y - static_cast<int>(cam.y) });
 
 			drawQueue.clear();
 
@@ -166,17 +163,16 @@ public:
 
 	Default: 256 x 192 
 
-	The user can specify a seed for the world to generate with:
+	The user can specify whether to enable vsync or not:
 
-	--seed
+	--vsync
 
-	Default: 0
+	Default: 0 (Set to 1 for true)
 */
 int main(int argc, char** argv)
 {
 	size_t wWidth = 256;
 	size_t wHeight = 192;
-	long seed = 0;
 
 	// Validate arguments and catch any user errors.
 	if (argc > 1)
@@ -192,10 +188,6 @@ int main(int argc, char** argv)
 				else if (strcmp(argv[c], "--height") == 0 && argc >c)
 				{
 					wHeight = static_cast<unsigned int>(std::stoi(argv[c + 1]));
-				}
-				else if (strcmp(argv[c], "--seed") == 0 && argc > c)
-				{
-					seed = std::stol(argv[c + 1]);
 				}
 				else
 				{
@@ -224,7 +216,7 @@ int main(int argc, char** argv)
 	else
 		ch = 1;
 
-	GameOfLife g(wWidth, wHeight, seed);
+	GameOfLife g(wWidth, wHeight);
 
 	if (g.Construct(1024 / cw, 768 / ch, cw, ch))
 		g.Start();
