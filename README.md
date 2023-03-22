@@ -1,4 +1,5 @@
 # JohnConwayGameofLife
+
 A demonstration of the classic Game of Life. This game was originally invented by the British Mathmetician, John Conway.
 This version was created using the [olcPixelGameEngine](https://github.com/OneLoneCoder/olcPixelGameEngine) by OneLoneCoder.com. An executable file can be downloaded from the release section.
 
@@ -23,7 +24,4 @@ This game achieves custom world size and look through 3 command-line arguments. 
 
 - **--width** The width of the grid. Default: 256
 - **--height** The height of the grid. Default: 192
-- **--seed** Used to generate different worlds based on the value. Default: 0
-
-The release zip folder contains some .bat files that include some sample custom sizes. The **--seed** argument is a bit limited in how varied it can make the world. 
-It is just a random number between 0 and 1 after all.
+- **--vsync** Used to enable VSYNC or run the simulation as fast as possible. Default: 0 (false)

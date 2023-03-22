@@ -6,8 +6,8 @@
 #include "fmt/ostream.h"	
 // olcPixelGameEngine already includes <vector> <chrono> and <iostream>.
 
-constexpr uint8_t cellAlive = 1;
-constexpr uint8_t cellDead = 0;
+inline constexpr const uint8_t cellAlive = 1;
+inline constexpr const uint8_t cellDead = 0;
 
 // Used in the drawQueue to determine which cells to draw at the end of an epoch.
 struct CellPosition
@@ -54,6 +54,7 @@ public:
 
 		size_t numCells = worldWidth * worldHeight;
 
+		// Default to match the screen size if any of the world size variables were 0.
 		if(numCells == 0) numCells = ((size_t)ScreenWidth() * (size_t)ScreenHeight()); 
 
 		drawQueue.reserve((size_t)ScreenWidth() * (size_t)ScreenHeight());
@@ -173,6 +174,7 @@ int main(int argc, char** argv)
 {
 	size_t wWidth = 256;
 	size_t wHeight = 192;
+	bool vsyncEnabled = false;
 
 	// Validate arguments and catch any user errors.
 	if (argc > 1)
@@ -188,6 +190,10 @@ int main(int argc, char** argv)
 				else if (strcmp(argv[c], "--height") == 0 && argc >c)
 				{
 					wHeight = static_cast<unsigned int>(std::stoi(argv[c + 1]));
+				}
+				else if (strcmp(argv[c], "--vsync") == 0 && argc >c)
+				{
+					vsyncEnabled = static_cast<unsigned int>(std::stoi(argv[c + 1]));
 				}
 				else
 				{
@@ -218,6 +224,6 @@ int main(int argc, char** argv)
 
 	GameOfLife g(wWidth, wHeight);
 
-	if (g.Construct(1024 / cw, 768 / ch, cw, ch))
+	if (g.Construct(1024 / cw, 768 / ch, cw, ch), false, vsyncEnabled)
 		g.Start();
 }
