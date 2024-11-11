@@ -8,9 +8,11 @@
             "installDir": "${sourceDir}/install/${presetName}",
             "generator": "Ninja",
             "cacheVariables": {
-                "CMAKE_CXX_STANDARD": "23",
                 "CMAKE_EXPORT_COMPILE_COMMANDS": true,
                 "CMAKE_CXX_COMPILER": "clang++"
+            },
+            "environment": {
+                "CMAKE_BUILD_PARALLEL_LEVEL": "12"
             }
         },
         {

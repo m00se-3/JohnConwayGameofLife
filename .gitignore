@@ -341,3 +341,4 @@ healthchecksdb
 
 build/**
 compile_commands.json
+CMakeUserPresets.json
