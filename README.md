@@ -25,3 +25,12 @@ This game achieves custom world size and look through 3 command-line arguments. 
 - **--width** The width of the grid. Default: 256
 - **--height** The height of the grid. Default: 192
 - **--vsync** Used to enable VSYNC or run the simulation as fast as possible. Default: 0 (false)
+
+## Todo List
+
+- Unit tests and fuzz tests
+- Parallelize the simulation
+- Pan and zoom using the mouse
+- Make randomizing the world optional
+- Allow for importing external data, image files for example, to start the simulation with
+- Live interaction with the simulation using the mouse and/or command console
