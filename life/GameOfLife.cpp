@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <random>
 #include <algorithm>
+#include <execution>
 
 namespace life
 {
@@ -67,9 +68,47 @@ namespace life
 		return result;
 	}
 
+	void GameOfLife::transformStates()
+	{		
+		std::copy(std::execution::par_unseq, currentState.cbegin(), currentState.cend(), previousState.begin());
+
+		for (auto y = 0u; y < worldHeight; y++)
+		{
+			for (auto x = 0u; x < worldWidth; x++)
+			{
+				uint8_t neighbors = countNeighbors(x, y);
+				CellState cell = previousState[(y * worldWidth) + x];
+
+				if (cell == CellState::Alive)
+				{
+					if (neighbors == 2 || neighbors == 3)
+					{
+						currentState[(y * worldWidth) + x] = CellState::Alive;
+						if (withinView(static_cast<float>(x), static_cast<float>(y))) { drawQueue.push_back({ .x=x, .y=y }); }
+					}
+					else
+					{ 
+						currentState[(y * worldWidth) + x] = CellState::Dead;
+					}
+				}
+				else
+				{
+					if (neighbors == 3)
+					{
+						currentState[(y * worldWidth) + x] = CellState::Alive;
+						if (withinView(static_cast<float>(x), static_cast<float>(y))) { drawQueue.push_back({ .x=x, .y=y }); }
+					}
+					else
+					{ 
+						currentState[(y * worldWidth) + x] = CellState::Dead;
+					}
+				}
+			}
+		}
+	}
+
     bool GameOfLife::OnUserUpdate(float fElapsedTime)
     {
-
 		if (GetKey(olc::Key::SPACE).bPressed) { simRunning = !simRunning; }
 		if (GetKey(olc::Key::W).bHeld) { cam.y -= 100.f * fElapsedTime; }
 		if (GetKey(olc::Key::S).bHeld) { cam.y += 100.f * fElapsedTime; }
@@ -87,50 +126,15 @@ namespace life
 
 		if (simRunning) 
 		{
-			previousState = currentState;
-
-			for (auto y = 0u; y < worldHeight; y++)
-			{
-				for (auto x = 0u; x < worldWidth; x++)
-				{
-					uint8_t neighbors = countNeighbors(x, y);
-					CellState cell = previousState[(y * worldWidth) + x];
-
-					if (cell == CellState::Alive)
-					{
-						if (neighbors == 2 || neighbors == 3)
-						{
-							currentState[(y * worldWidth) + x] = CellState::Alive;
-							if (withinView(static_cast<float>(x), static_cast<float>(y))) { drawQueue.push_back({ .x=x, .y=y }); }
-						}
-						else
-						{ 
-							currentState[(y * worldWidth) + x] = CellState::Dead;
-						}
-					}
-					else
-					{
-						if (neighbors == 3)
-						{
-							currentState[(y * worldWidth) + x] = CellState::Alive;
-							if (withinView(static_cast<float>(x), static_cast<float>(y))) { drawQueue.push_back({ .x=x, .y=y }); }
-						}
-						else
-						{ 
-							currentState[(y * worldWidth) + x] = CellState::Dead;
-						}
-					}
-				}
-			}
+			transformStates();
 
 			Clear(olc::BLACK);
 
-			for (auto& cell : drawQueue)
-			{ 
-				const int cellX = static_cast<int>(cell.x), cellY = static_cast<int>(cell.y);
-				
-				Draw(olc::vi2d{ cellX - std::lround(cam.x), cellY - std::lround(cam.y) });
-			}
+			std::for_each(std::execution::par_unseq, drawQueue.cbegin(), drawQueue.cend(),
+			[this](const auto& cell)
+			{
+				Draw(olc::vi2d{ static_cast<int>(cell.x), static_cast<int>(cell.y) });
+			});
 
 			drawQueue.clear();
 

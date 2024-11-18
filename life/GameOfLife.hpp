@@ -21,10 +21,11 @@ namespace life
         GameOfLife(uint32_t w, uint32_t h);
         
         bool OnUserCreate() override;
-        bool OnUserUpdate(float fElapsedTime) override;	
-        uint8_t countNeighbors(uint32_t x, uint32_t y);
+        bool OnUserUpdate(float fElapsedTime) override;
+        void transformStates();
+        [[nodiscard]] uint8_t countNeighbors(uint32_t x, uint32_t y);
         
-        constexpr bool withinView(float x, float y) const
+        [[nodiscard]] constexpr bool withinView(float x, float y) const
         {
             return (x >= cam.x && x < cam.x + cam.w && y >= cam.y && y < cam.y + cam.h);
         }
@@ -32,14 +33,13 @@ namespace life
     private:
         // Two copies of the map are needed to avoid contaminating the simulation.
         std::vector<CellState> currentState, previousState;
-
         std::vector<CellPosition> drawQueue;
-        bool simRunning = true;
 
         uint32_t worldWidth;
         uint32_t worldHeight;
 
         Camera cam{};
+        bool simRunning = true;
     };
 }
 

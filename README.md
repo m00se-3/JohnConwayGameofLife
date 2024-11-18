@@ -29,7 +29,6 @@ This game achieves custom world size and look through 3 command-line arguments. 
 ## Todo List
 
 - Unit tests and fuzz tests
-- Parallelize the simulation
 - Pan and zoom using the mouse
 - Make randomizing the world optional
 - Allow for importing external data, image files for example, to start the simulation with

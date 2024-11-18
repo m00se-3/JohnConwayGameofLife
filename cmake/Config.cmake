@@ -1,6 +1,20 @@
-find_program(clang_tidy_FOUND clang-tidy)
-find_program(cppcheck_FOUND cppcheck)
-find_program(ccache_FOUND ccache)
+if(DEFINED CLANG_TIDY_EXE)
+	find_program(clang_tidy_FOUND ${CLANG_TIDY_EXE})
+else()
+	find_program(clang_tidy_FOUND clang-tidy)
+endif()
+
+if(DEFINED CPPCHECK_EXE)
+	find_program(cppcheck_FOUND ${CPPCHECK_EXE})
+else()
+	find_program(cppcheck_FOUND cppcheck)
+endif()
+
+if(DEFINED CCACHE_EXE)
+	find_program(ccache_FOUND ${CCACHE_EXE})
+else()
+	find_program(ccache_FOUND ccache)
+endif()
 
 if(${CMAKE_CXX_COMPILER_ID} MATCHES MSVC)
 	include(${CMAKE_CURRENT_LIST_DIR}/MSVCOptions.cmake)
