@@ -4,5 +4,5 @@ Checks: '-*, cppcoreguidelines-*,clang-analyzer-*,
   cert-*, misc-*, -misc-include-cleaner, -misc-non-private-member-variables-in-classes, 
   performance-*, readability-*,-readability-uppercase-literal-suffix, 
   -readability-identifier-length, -readability-isolate-declaration, -readability-magic-numbers,
-  -performance-unnecessary-value-param'
+  -performance-unnecessary-value-param, -misc-use-anonymous-namespace'
 HeaderFilterRegex: '.*'

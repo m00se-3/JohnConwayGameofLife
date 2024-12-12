@@ -22,18 +22,11 @@ constexpr int def_worldH = 192;
 	--height
 
 	Default: 256 x 192 
-
-	The user can specify whether to enable vsync or not:
-
-	--vsync
-
-	Default: 0 (Set to 1 for true)
 */
 int main(int argc, const char** argv)
 {
 	int wWidth = def_worldW;
 	int wHeight = def_worldH;
-	bool vsyncEnabled = false;
 
 	const auto args = std::span<const char*>{ argv, static_cast<size_t>(argc) };
 
@@ -49,7 +42,7 @@ int main(int argc, const char** argv)
 			{
 				if(argumentToSet.empty())
 				{
-					if (arg == "--width" || arg == "--height" || arg == "--vsync")
+					if (arg == "--width" || arg == "--height")
 					{
 						argumentToSet = arg;
 					}
@@ -83,12 +76,6 @@ int main(int argc, const char** argv)
 					{
 						throw std::invalid_argument{ fmt::format("Option: '{}', value: '{}'", argumentToSet, arg) };
 					}
-				}
-				else if(argumentToSet == "--vsync")
-				{
-					auto result = std::strtoul(arg.data(), nullptr, base10);
-					if(errno != ERANGE && result == 1u) { vsyncEnabled = true; }
-					else { throw std::invalid_argument{ fmt::format("Option: '{}', value: '{}'", argumentToSet, arg) }; }
 				}
 				// NOLINTEND(bugprone-suspicious-stringview-data-usage)
 				
@@ -129,7 +116,7 @@ int main(int argc, const char** argv)
 
 	life::GameOfLife g{static_cast<uint32_t>(wWidth), static_cast<uint32_t>(wHeight)};
 
-	if (g.Construct(def_windowW / cw, def_windowH / ch, cw, ch, false, vsyncEnabled) == olc::rcode::OK)
+	if (g.Construct(def_windowW / cw, def_windowH / ch, cw, ch, false, true) == olc::rcode::OK)
 	{
 		g.Start();
 	}

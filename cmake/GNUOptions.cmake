@@ -9,7 +9,7 @@ elseif(${CMAKE_BUILD_TYPE} MATCHES RelWithDebInfo)
     list(
         APPEND CompilerFlags 
         "-g"
-        "-02"
+        "-O2"
         "-U_FORTIFY_SOURCE"
         "-D_FORTIFY_SOURCE=3"
         "-D_GLIBCXX_ASSERTIONS"
@@ -17,7 +17,7 @@ elseif(${CMAKE_BUILD_TYPE} MATCHES RelWithDebInfo)
 else()
     list(
         APPEND CompilerFlags 
-        "-02"
+        "-O2"
         "-U_FORTIFY_SOURCE"
         "-D_FORTIFY_SOURCE=2"
     )

@@ -9,6 +9,7 @@
             "generator": "Ninja",
             "cacheVariables": {
                 "CMAKE_EXPORT_COMPILE_COMMANDS": true,
+                "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_CXX_COMPILER": "clang++"
             },
             "environment": {
@@ -19,6 +20,14 @@
             "name": "win-debug",
             "inherits": "base",
             "binaryDir": "${sourceDir}/build/${presetName}"
+        },
+        {
+            "name": "win-release",
+            "inherits": "base",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
         }
     ]
 }
